@@ -4,12 +4,10 @@ import { create } from "zustand";
 import parseZodErrors, { ZodErrors } from "../util/parseZodErrors";
 
 export const DemoFormSchema = z.object({
-  name: z.string().trim().min(1),
-  age: z.number().gte(13, "Age must be greater than or equal to 13"),
+  name: z.string().min(1),
+  age: z.number(),
   email: z.string().email(),
-  zipCode: z
-    .string()
-    .regex(/^\d{5}(?:[-\s]\d{4})?$/i, "Zipcode must be in valid format"),
+  zipCode: z.number(),
 });
 
 type DemoForm = z.infer<typeof DemoFormSchema>;
@@ -20,22 +18,14 @@ type DemoFormState = {
   values: Partial<DemoForm>;
   touched: Partial<Record<keyof DemoForm, boolean>>;
   errors: DemoFormErrors;
-  resetForm: () => void;
   setFormValue: <T extends keyof DemoForm>(key: T, value: DemoForm[T]) => void;
-  validateForm: () => boolean;
+  validateForm: () => void;
 };
 
 export const useDemoForm = create<DemoFormState>((set, get) => ({
   values: {},
   touched: {},
   errors: {},
-  resetForm: () => {
-    set(() => ({
-      values: {},
-      touched: {},
-      errors: {},
-    }));
-  },
   setFormValue: (key, value) => {
     set((state) => ({
       values: {
@@ -52,7 +42,6 @@ export const useDemoForm = create<DemoFormState>((set, get) => ({
     try {
       DemoFormSchema.parse(get().values);
       set(() => ({ errors: {} }));
-      return true;
     } catch (e: unknown) {
       set((state) => {
         const errors = parseZodErrors(e as ZodError<DemoForm>);
@@ -67,7 +56,6 @@ export const useDemoForm = create<DemoFormState>((set, get) => ({
           errors,
         };
       });
-      return false;
     }
   },
 }));

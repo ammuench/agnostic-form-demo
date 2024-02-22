@@ -1,57 +1,24 @@
-import { useDemoForm } from "./forms/demoForm";
-
 import "./App.css";
+import { ExampleOne } from "./components/ExampleOne";
+import { FormStateDisplay } from "./components/FormStateDisplay";
+import { SubmitSection } from "./components/SubmitSection";
 
-function App() {
-  const demoForm = useDemoForm();
+// const fromExampleRenderer = (exampleToUse: FormExampleEnum): JSX.Element => {
+//   switch (exampleToUse) {
+//     default:
+//       return <ExampleOne />;
+//   }
+// };
 
+const App = () => {
   return (
-    <section className="w-96 flex flex-col gap-4">
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Name</span>
-        </div>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered input-primary w-full w-96"
-          value={demoForm.values.name || ""}
-          onChange={(event) => {
-            demoForm.setFormValue("name", event.target.value);
-          }}
-        />
-        {demoForm.errors.name && (
-          <div className="label">
-            <span className="label-text-alt text-red-500">
-              {demoForm.errors.name}
-            </span>
-          </div>
-        )}
-      </label>
-      <label className="form-control w-full max-w-xs">
-        <div className="label">
-          <span className="label-text">Email</span>
-        </div>
-        <input
-          type="text"
-          placeholder="Type here"
-          className="input input-bordered input-primary w-full w-96"
-          value={demoForm.values.email || ""}
-          onChange={(event) => {
-            demoForm.setFormValue("email", event.target.value);
-          }}
-        />
-        {demoForm.errors.email && (
-          <div className="label">
-            <span className="label-text-alt text-red-500">
-              {demoForm.errors.email}
-            </span>
-          </div>
-        )}
-      </label>
-      <button onClick={demoForm.validateForm}>Validate</button>
-    </section>
+    <div className="grid grid-cols-[1fr_1fr] grid-rows-[auto_1fr_auto] gap-4 items-center h-full">
+      <h1 className="col-span-2 self-end">Zod + Zustand Simple Form</h1>
+      <ExampleOne />
+      <FormStateDisplay />
+      <SubmitSection />
+    </div>
   );
-}
+};
 
 export default App;
